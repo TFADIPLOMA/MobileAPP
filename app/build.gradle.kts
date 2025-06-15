@@ -57,4 +57,5 @@ dependencies {
     implementation(libs.face.detection)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.okhttp)
 }

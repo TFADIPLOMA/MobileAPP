@@ -2,11 +2,16 @@ package com.example.tfaandroid
 
 // api/AuthService.kt
 import android.R
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface AuthService {
     @POST("/api/Auth/Registration")
@@ -25,6 +30,20 @@ interface AuthService {
 
     @POST("/api/Auth/VerifyQrCode")
     fun verifyQrCode(@Body request:VerifyCodeRequest):Call<Void>
+
+    @Multipart
+    @POST("/api/face/register")
+    fun registerFace(
+        @Part("email") email: RequestBody,
+        @Part file: MultipartBody.Part
+    ): Call<LoginResponse>
+
+    @Multipart
+    @POST("/api/face/verify")
+    fun verifyFace(
+        @Part("email") email: RequestBody,
+        @Part file: MultipartBody.Part
+    ): Call<ResponseBody>
 }
 
 data class RegistrationResponse(

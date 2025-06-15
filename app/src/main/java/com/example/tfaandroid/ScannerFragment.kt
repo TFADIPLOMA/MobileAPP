@@ -1,6 +1,7 @@
 package com.example.tfaandroid
 
 import android.Manifest
+import android.app.Activity
 import android.app.FragmentManager
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,7 +9,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.*
@@ -22,9 +25,28 @@ import com.google.mlkit.vision.common.InputImage
 
 class ScannerFragment : Fragment() {
 
+
     private lateinit var previewView: PreviewView
     private var scanning = false
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val returnedString = data?.getStringExtra("result_key")
+                if(returnedString == "good") {
+                    Toast.makeText(requireContext(), "Вход выполнен", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, GeneralFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,7 +136,7 @@ class ScannerFragment : Fragment() {
                 val intent = Intent(context, FaceScannerActivity::class.java)
                 intent.putExtra("mode", "scanner")
                 intent.putExtra("code", result)
-                startActivity(intent)
+                resultLauncher.launch(intent)
             }
             .setCancelable(false)
             .show()
