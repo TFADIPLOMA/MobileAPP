@@ -124,7 +124,6 @@ class FaceScannerActivity : AppCompatActivity() {
 
                                 val firstFace = faceRects.first()
                                 val intersection = Rect()
-                                val intersects = intersection.setIntersect(guideRect, firstFace)
                                 val overlapArea = intersection.width() * intersection.height()
                                 val faceArea = firstFace.width() * firstFace.height()
                                 val overlapRatio =
@@ -152,36 +151,20 @@ class FaceScannerActivity : AppCompatActivity() {
 
                                         if (currentMode == "scanner") {
                                             val code = intent.getStringExtra("code") ?: ""
-                                            val email = user.email;
-
-                                            val emailPart = email
-                                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                                            val emailPart = user.email.toRequestBody("text/plain".toMediaTypeOrNull())
 
                                             RetrofitClient.authService.verifyFace(emailPart,body)
                                                 .enqueue(object:Callback<ResponseBody>{
-                                                    override fun onResponse(
-                                                        call: Call<ResponseBody?>,
-                                                        response: Response<ResponseBody?>
-                                                    ) {
-                                                        val body = response.errorBody()
-                                                        Log.d("Retrofit",response.code().toString())
+                                                    override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
                                                         if(response.isSuccessful) {
                                                             RetrofitClient.authService.verifyQrCode(
-                                                                VerifyCodeRequest(email, code)
+                                                                VerifyCodeRequest(user.email, code)
                                                             )
                                                                 .enqueue(object : Callback<Void> {
-                                                                    override fun onFailure(
-                                                                        call: Call<Void?>,
-                                                                        t: Throwable
-                                                                    ) {
+                                                                    override fun onFailure(call: Call<Void?>, t: Throwable) {
                                                                         Toast.makeText(this@FaceScannerActivity,"Верификация QR кода не удалалсь, попробуйте еще раз.",Toast.LENGTH_LONG).show()
-
                                                                     }
-
-                                                                    override fun onResponse(
-                                                                        call: Call<Void?>,
-                                                                        response2: Response<Void?>
-                                                                    ) {
+                                                                    override fun onResponse(call: Call<Void?>, response2: Response<Void?> ){
                                                                         Toast.makeText(this@FaceScannerActivity,"Вход выполнен",Toast.LENGTH_LONG).show()
                                                                         val resultIntent = Intent()
                                                                         resultIntent.putExtra("result_key", "good")
@@ -190,7 +173,7 @@ class FaceScannerActivity : AppCompatActivity() {
                                                                     }
                                                                 })
                                                         } else {
-                                                            Toast.makeText(this@FaceScannerActivity,"Лицо не опознано 1, попробуйте еще раз!",Toast.LENGTH_LONG).show()
+                                                            Toast.makeText(this@FaceScannerActivity,"Лицо не опознано, попробуйте еще раз!",Toast.LENGTH_LONG).show()
                                                         }
                                                     }
 
@@ -198,7 +181,7 @@ class FaceScannerActivity : AppCompatActivity() {
                                                         call: Call<ResponseBody?>,
                                                         t: Throwable
                                                     ) {
-                                                        Toast.makeText(this@FaceScannerActivity,"Лицо не опознано 2, попробуйте еще раз!",Toast.LENGTH_LONG).show()
+                                                        Toast.makeText(this@FaceScannerActivity,"Лицо не опознано, попробуйте еще раз!",Toast.LENGTH_LONG).show()
                                                     }
                                                 })
                                         }
