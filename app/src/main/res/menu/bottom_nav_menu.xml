@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_general" android:icon="@drawable/ic_home" android:title="Главная" />
+    <item android:id="@+id/nav_documents" android:icon="@drawable/ic_document" android:title="Документы" />
+    <item android:id="@+id/nav_scanner" android:icon="@drawable/ic_scanner" android:title="QR сканер" />
+    <item android:id="@+id/nav_login" android:icon="@drawable/ic_profile" android:title="Профиль" />
+</menu>

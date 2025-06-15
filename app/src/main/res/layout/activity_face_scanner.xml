@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/faceScannerRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Камера -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Овал для лица (в PNG с прозрачностью) -->
+    <ImageView
+        android:id="@+id/faceGuideView"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:src="@drawable/face_oval_overlay"
+        android:scaleType="fitCenter"
+        android:contentDescription="Face guide" />
+
+    <com.example.tfaandroid.FaceOverlayView
+        android:id="@+id/faceOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <!-- Подсказка -->
+    <TextView
+        android:id="@+id/faceHintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Совместите лицо с овалом"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:background="#66000000"
+        android:padding="8dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="96dp"
+        android:visibility="gone" />
+
+    <!-- Кнопка Назад -->
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Назад"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp" />
+
+</FrameLayout>

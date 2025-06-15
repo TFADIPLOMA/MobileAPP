@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:layout_marginBottom="30dp"
+        android:text="Пожалуйста,\nвведите данные для входа:"
+    />
+
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="username"
+        android:hint="Логин"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="password"
+        android:hint="Пароль"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="Войти" />
+
+    <TextView
+        android:id="@+id/goToRegistrationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="если нет аккаунта"
+        android:textAlignment="center"
+        />
+
+    <Button
+        android:id="@+id/goToRegistrationBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Зарегистрироваться"
+        android:layout_marginTop="25dp"
+        />
+
+    <EditText
+        android:id="@+id/editTextCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Код из почты"
+        android:inputType="number"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonVerifyCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Подтвердить код"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
