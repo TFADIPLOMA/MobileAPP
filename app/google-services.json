@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "254789498870",
+    "project_id": "tfadiploma",
+    "storage_bucket": "tfadiploma.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254789498870:android:a54c1888b2505c1743b9d7",
+        "android_client_info": {
+          "package_name": "com.example.tfaandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdLzmZPxA-znx0wyy_Yz-PFOc68V3nPFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
