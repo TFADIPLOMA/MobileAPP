@@ -180,16 +180,17 @@ class FaceScannerActivity : AppCompatActivity() {
                                     val body = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
                                     val imagePart = createImagePartFromFile(imageFile)
-                                    val user: UserDto = Gson().fromJson(
-                                        authPrefs.userJson,
-                                        UserDto::class.java
-                                    )
+                                    val user: UserDto? = if (!authPrefs.userJson.isNullOrEmpty()) {
+                                        Gson().fromJson(authPrefs.userJson, UserDto::class.java)
+                                    } else {
+                                        null
+                                    }
 
                                     runOnUiThread {
 
                                         if (currentMode == "scanner") {
                                             val code = intent.getStringExtra("code") ?: ""
-                                            val emailPart = user.email.toRequestBody("text/plain".toMediaTypeOrNull())
+                                            val emailPart = user!!.email.toRequestBody("text/plain".toMediaTypeOrNull())
 
                                             RetrofitClient.authService.verifyFace(emailPart,body)
                                                 .enqueue(object:Callback<ResponseBody>{
