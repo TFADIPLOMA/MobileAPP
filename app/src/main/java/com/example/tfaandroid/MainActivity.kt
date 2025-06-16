@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
                 authPrefs.userJson,
                 UserDto::class.java
             )
+            Log.d("FCM Token","UpdatePermission")
+            sendFcmTokenToServer()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !user.email.isNullOrEmpty()) {
                 ActivityCompat.requestPermissions(
                     this,
@@ -152,5 +154,14 @@ class MainActivity : AppCompatActivity() {
             UserDto::class.java
         )
         RetrofitClient.authService.saveUserFCMToken(VerifyCodeRequest(user.email,token))
+            .enqueue(object: Callback<Void>{
+                override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                    Log.d("FCM", "Токен сохранен на сервере")
+                }
+
+                override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    Log.d("FCM", "Ошибка сохраненния токена на сервере")
+                }
+            })
     }
 }
