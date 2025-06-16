@@ -105,7 +105,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun redirectToLogin() {
-
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, LoginFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onRequestPermissionsResult(

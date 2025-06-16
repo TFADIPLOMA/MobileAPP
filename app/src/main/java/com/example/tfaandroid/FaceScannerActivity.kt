@@ -43,6 +43,9 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
+import  android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 
 class FaceScannerActivity : AppCompatActivity() {
 
@@ -50,6 +53,8 @@ class FaceScannerActivity : AppCompatActivity() {
     private lateinit var overlayView: FaceOverlayView
     private lateinit var guideView: ImageView
     private lateinit var authPrefs: AuthPreferences
+
+    private val CAMERA_PERMISSION_CODE = 100
 
     private lateinit var imageCapture: ImageCapture
 
@@ -76,7 +81,39 @@ class FaceScannerActivity : AppCompatActivity() {
             finish()
         }
 
-        startCamera()
+        checkCameraPermission()
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Разрешение не предоставлено — запрашиваем его
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_CODE
+            )
+        } else {
+            // Разрешение уже есть
+            startCamera()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera()
+            } else {
+                Toast.makeText(this, "Разрешение на камеру отклонено", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -124,6 +161,7 @@ class FaceScannerActivity : AppCompatActivity() {
 
                                 val firstFace = faceRects.first()
                                 val intersection = Rect()
+                                val intersects = intersection.setIntersect(guideRect, firstFace)
                                 val overlapArea = intersection.width() * intersection.height()
                                 val faceArea = firstFace.width() * firstFace.height()
                                 val overlapRatio =
