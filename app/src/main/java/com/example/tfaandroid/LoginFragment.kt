@@ -128,6 +128,8 @@ class LoginFragment : Fragment() {
                                 authPrefs.accessToken = responseBody.accessToken
                                 authPrefs.refreshToken = responseBody.refreshToken
                                 authPrefs.userJson = gson.toJson(responseBody.user)
+
+                                (activity as? MainActivity)?.updatePermissions()
                             }
 
                             Toast.makeText(requireContext(), "Код верный", Toast.LENGTH_SHORT).show()

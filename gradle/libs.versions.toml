@@ -3,6 +3,8 @@ agp = "8.9.3"
 barcodeScanning = "17.3.0"
 cameraCamera2 = "1.4.2"
 faceDetection = "16.1.7"
+firebaseBom = "33.15.0"
+firebaseMessaging = "24.1.1"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -25,6 +27,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 face-detection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

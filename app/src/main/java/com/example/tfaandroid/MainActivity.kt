@@ -2,10 +2,14 @@ package com.example.tfaandroid
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,14 +18,33 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     private lateinit var authPrefs: AuthPreferences
 
+    fun updatePermissions() {
+        if(!authPrefs.userJson.isNullOrEmpty()) {
+            val user: UserDto = Gson().fromJson(
+                authPrefs.userJson,
+                UserDto::class.java
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !user.email.isNullOrEmpty()) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    100
+                )
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         authPrefs = MyApp.get(this).authPrefs
 
+        updatePermissions()
+
         val refreshToken = authPrefs.refreshToken
         Log.i("Refresh token", refreshToken.toString());
+
         if (!refreshToken.isNullOrBlank()) {
             RetrofitClient.authService.refresh("Bearer $refreshToken")
                 .enqueue(object : Callback<LoginResponse?> {
@@ -55,11 +78,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
-
-
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, GeneralFragment())
@@ -88,5 +106,48 @@ class MainActivity : AppCompatActivity() {
 
     private fun redirectToLogin() {
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 100) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Log.d("FCM", "Разрешение на уведомления получено")
+                sendFcmTokenToServer()
+            } else {
+                Log.d("FCM", "Разрешение на уведомления отклонено")
+            }
+        }
+    }
+
+    // Получение и отправка токена
+    private fun sendFcmTokenToServer() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    Log.d("FCM", "FCM Token: $token")
+                    // TODO: Отправь токен на свой сервер
+                    sendTokenToBackend(token)
+                } else {
+                    Log.w("FCM", "Ошибка получения токена", task.exception)
+                }
+            }
+    }
+
+    private fun sendTokenToBackend(token: String) {
+
+        Log.d("FCM", "Отправка токена на сервер: $token")
+
+        val user: UserDto = Gson().fromJson(
+            authPrefs.userJson,
+            UserDto::class.java
+        )
+        RetrofitClient.authService.saveUserFCMToken(VerifyCodeRequest(user.email,token))
     }
 }

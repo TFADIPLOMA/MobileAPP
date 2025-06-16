@@ -44,6 +44,9 @@ interface AuthService {
         @Part("email") email: RequestBody,
         @Part file: MultipartBody.Part
     ): Call<ResponseBody>
+
+    @POST("/api/auth/saveUserFCMToken")
+    fun saveUserFCMToken(@Body request: VerifyCodeRequest):Call<Void>
 }
 
 data class RegistrationResponse(
